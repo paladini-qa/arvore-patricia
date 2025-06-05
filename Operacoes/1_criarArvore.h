@@ -4,21 +4,23 @@
 #include <stdlib.h>
 
 //---------------------------------
-pNohPrefixo criarNohPrefixo(int terminal){
+pNohPrefixo criarNohPrefixo(int terminal, int bitIndex)
+{
 
     pNohPrefixo pNovo = malloc(sizeof(NohPrefixo));
-    pNovo->terminal   = terminal;
-    pNovo->esquerda   = NULL;
-    pNovo->direita    = NULL;
+    pNovo->terminal = terminal;
+    pNovo->bitIndex = bitIndex;
+    pNovo->esquerda = NULL;
+    pNovo->direita = NULL;
     return pNovo;
 }
 
-
 /* --------------------------*/
-pDPrefixo criarArvorePrefixo(){
+pDPrefixo criarArvorePrefixo()
+{
 
     pDPrefixo dPref = malloc(sizeof(DPrefixo));
-    dPref->raiz     = criarNohPrefixo(0);   // a raiz não armazena chave
+    dPref->raiz = criarNohPrefixo(0, -1);
     dPref->quantidadeNohs = 1;
 
     return dPref;
