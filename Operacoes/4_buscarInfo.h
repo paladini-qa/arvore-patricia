@@ -1,43 +1,71 @@
 #ifndef BUSCAR_INFO_PREFIXO_H
 #define BUSCAR_INFO_PREFIXO_H
 
-int buscarInfoPrefixoRecursivo (pNohPrefixo raiz, char chave[], int k, int* L)
+int getBit(char chave[], int bitIndex, int tamanhoChave)
 {
-    (*L)++; // incrementa pois iniciou em ZERO
+    if (bitIndex >= tamanhoChave)
+        return 0;
+    return (chave[bitIndex] == '1') ? 1 : 0;
+}
 
-     // caso base 1 - a chave é prefixo de outra chave
-    if(raiz != NULL && *L == k){
+int encontrarPrimeiraBitDiferente(char chave1[], int tam1, char chave2[], int tam2)
+{
+    int maxLen = (tam1 > tam2) ? tam1 : tam2;
+    int i;
+
+    for (i = 0; i < maxLen; i++)
+    {
+        int bit1 = (i < tam1) ? getBit(chave1, i, tam1) : 0;
+        int bit2 = (i < tam2) ? getBit(chave2, i, tam2) : 0;
+
+        if (bit1 != bit2)
+        {
+            return i;
+        }
+    }
+    return maxLen;
+}
+
+int buscarInfoPrefixoRecursivo(pNohPrefixo raiz, char chave[], int tamanhoChave)
+{
+    if (raiz == NULL)
+    {
+        return 0;
+    }
+
+    if (raiz->terminal == 1)
+    {
         return 1;
     }
 
-    // caso base 2 - outra chave é prefixo da chave sendo buscada
-    if(raiz != NULL && raiz->terminal == 1 && *L < k){
-       return 1;
+    int bit;
+    if (raiz->bitIndex == -1)
+    {
+        if (raiz->esquerda == NULL && raiz->direita == NULL)
+        {
+            return 0;
+        }
+        bit = getBit(chave, 0, tamanhoChave);
+    }
+    else
+    {
+        bit = getBit(chave, raiz->bitIndex, tamanhoChave);
     }
 
-
-    // caso base 1 - a chave não foi encontrada na árvore
-    if(raiz == NULL && *L <= k){
-       return 0;
+    if (bit == 0)
+    {
+        return buscarInfoPrefixoRecursivo(raiz->esquerda, chave, tamanhoChave);
     }
-
-    if (chave[*L] == '0'){
-        return buscarInfoPrefixoRecursivo(raiz->esquerda, chave, k , L);
-    }
-    else {
-        return buscarInfoPrefixoRecursivo(raiz->direita, chave, k , L);
+    else
+    {
+        return buscarInfoPrefixoRecursivo(raiz->direita, chave, tamanhoChave);
     }
 }
 
-
 /* ----------------------------------------------------------*/
-int buscarInfoPrefixo (pDPrefixo arvore, char chave[], int k)
+int buscarInfoPrefixo(pDPrefixo arvore, char chave[], int k)
 {
-    int L=-1;
-
-    return buscarInfoPrefixoRecursivo(arvore->raiz, chave, k, &L);
-
+    return buscarInfoPrefixoRecursivo(arvore->raiz, chave, k);
 }
 
 #endif
-
