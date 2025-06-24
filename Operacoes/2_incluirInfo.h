@@ -1,8 +1,6 @@
 #ifndef INCLUIR_INFO_PREFIXO_H
 #define INCLUIR_INFO_PREFIXO_H
 
-int buscarInfoPrefixo(pDPrefixo, char[], int);
-
 int getBitInsercao(char chave[], int bitIndex, int tamanhoChave)
 {
     if (bitIndex >= tamanhoChave)
